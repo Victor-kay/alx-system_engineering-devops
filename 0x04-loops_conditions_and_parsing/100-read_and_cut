@@ -2,8 +2,6 @@
 # Display the content of /etc/passwd with specific information.
 #   Only displays the username, user id, and user home directory path.
 
-while IFS=: read -r username _ uid _ _ home _; do
-  echo "Username: $username"
-  echo "User ID: $uid"
-  echo "Home Directory: $home"
-done < " /etc/passwd"
+while read -r passwd; do
+  echo "$passwd" | cut -d ':' -f1,3,6
+done < "/etc/passwd"
