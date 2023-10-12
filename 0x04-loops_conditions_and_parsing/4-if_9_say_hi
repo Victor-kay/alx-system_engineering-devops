@@ -1,0 +1,13 @@
+#!/bin/bash
+# Displays "Best School" 10 times, with a special condition on the 9th iteration.
+
+count=1
+
+while [ $count -le 10 ]; do
+    if [ $count -eq 9 ]; then
+        echo -e "Best School\nHi"
+    else
+        echo "Best School"
+    fi
+    ((count++))
+done
