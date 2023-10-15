@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Check if netstat and lsof commands are available
+if ! command -v netstat &> /dev/null || ! command -v lsof &> /dev/null; then
+    echo "Both netstat and lsof commands are required to run this script."
+    exit 1
+fi
+
+# Get a list of listening ports using netstat
+listening_ports=$(netstat -tuln | awk '/^tcp/ {print $4}')
+
+# Loop through each listening port and find the associated program
+for port in $listening_ports; do
+    pid=$(lsof -i :$port | awk '$1 == "COMMAND" {next} {print $2}')
+    program=$(lsof -i :$port | awk '$1 == "COMMAND" {next} {print $1}')
+    echo "Port: $port - PID: $pid - Program: $program"
+done
