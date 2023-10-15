@@ -1,0 +1,7 @@
+#!/bin/bash/env bash
+
+# Display the message indefinitely with a 2-second sleep between iterations
+while true; do
+    echo "To infinity and beyond indefinitely"
+    sleep 2
+done
