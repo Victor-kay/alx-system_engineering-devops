@@ -3,17 +3,15 @@
 #   - localhost resolves to 127.0.0.2
 #   - facebook.com resolves to 8.8.8.8
 
-# Copy the current hosts file to a new file
-sudo cp /etc/hosts /etc/hosts.bak
+# Copy the existing hosts file to a temporary file
+cp /etc/hosts /tmp/hosts.tmp
 
-# Create a new hosts file with custom DNS settings
-echo "127.0.0.2       localhost" | sudo tee /etc/hosts.new > /dev/null
-echo "8.8.8.8         facebook.com" | sudo tee -a /etc/hosts.new > /dev/null
+# Add or update the localhost and facebook.com entries
+echo "127.0.0.2       localhost" > /tmp/hosts.tmp
+echo "8.8.8.8         facebook.com" >> /tmp/hosts.tmp
 
-# Replace the old hosts file with the new one
-sudo mv /etc/hosts.new /etc/hosts
+# Overwrite the original hosts file with the updated one
+cp -f /tmp/hosts.tmp /etc/hosts
 
-# Clean up the backup file (optional)
-# sudo rm /etc/hosts.bak
-
-echo "DNS configuration updated successfully."
+# Clean up the temporary file
+rm /tmp/hosts.tmp
