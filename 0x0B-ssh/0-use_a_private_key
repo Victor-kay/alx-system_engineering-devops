@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Server details
-server="249326-web-01"
-user="ubuntu"
+server_ip="100.25.168.39"
+server_user="ubuntu"
 
 # SSH connection using private key
-ssh -i ~/.ssh/school $user@$serveri
+ssh -i ~/.ssh/school $server_user@$server_ip
