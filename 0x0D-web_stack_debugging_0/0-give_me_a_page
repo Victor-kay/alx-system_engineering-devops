@@ -1,3 +1,16 @@
-#!usr/bin/env bash
-#start apache2 inside docker
+#!/usr/bin/env bash
+
+# Install Apache if not already installed
+if ! command -v apache2 > /dev/null; then
+    apt-get update
+    apt-get install -y apache2
+fi
+
+# Start Apache service
 service apache2 start
+
+# Configure Apache to serve "Hello Holberton" from the root
+echo "<html><head></head><body>Hello Holberton</body></html>" > /var/www/html/index.html
+
+# Restart Apache to apply the configuration
+service apache2 restart
