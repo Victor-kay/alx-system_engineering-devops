@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+# Script to configure Nginx for a 301 Redirect on a new Ubuntu machine
 
 # Run the script with sudo
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
 
