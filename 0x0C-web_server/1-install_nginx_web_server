@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# This script configures a new Ubuntu machine to install and set up Nginx
 
 # Update package list and install nginx with the -y flag
 sudo apt-get update
