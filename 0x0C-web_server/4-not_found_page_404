@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Script to configure Nginx for a custom 404 page on a new Ubuntu machine
+
+# Run the script with sudo
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
+  exit
+fi
+
+# Configure Nginx for custom 404 page
+echo "Configuring Nginx for a custom 404 page..."
+echo -e "server {\n    listen 80 default_server;\n    listen [::]:80 default_server;\n\n    root /var/www/html;\n    server_name _;\n\n    error_page 404 /404.html;\n    location = /404.html {\n        internal;\n        echo \"Ceci n'est pas une page.\";\n    }\n}" > /etc/nginx/sites-available/default
+
+# Test Nginx configuration and reload
+nginx -t && systemctl reload nginx
+
+echo "Custom 404 page configured successfully!"
+
