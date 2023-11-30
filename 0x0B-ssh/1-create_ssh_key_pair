@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Bash script to create an RSA key pair
+
+# Set the key file name and passphrase
+key_file="school"
+passphrase="betty"
+
+# Create RSA key pair with 4096 bits and protect with passphrase
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/$key_file -N $passphrase
+
+echo "RSA key pair created successfully."

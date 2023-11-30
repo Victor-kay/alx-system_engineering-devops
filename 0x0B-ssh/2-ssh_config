@@ -1,0 +1,10 @@
+# SSH client configuration
+
+Host your_server_alias
+    HostName 98.98.98.98  # Replace with the actual IP address of your server
+    User ubuntu
+    IdentityFile ~/.ssh/school
+    PreferredAuthentications publickey
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    LogLevel VERBOSE
