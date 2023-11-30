@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Run the script with sudo
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+# Redirect to a new page with a 301 Moved Permanently
+echo "Configuring Nginx for redirection..."
+echo -e "location /redirect_me {\n    return 301 http://your-new-page.com;\n}" > /etc/nginx/sites-available/default
+
+# Test Nginx configuration and reload
+nginx -t && systemctl reload nginx
+
+echo "Redirection configured successfully!"
