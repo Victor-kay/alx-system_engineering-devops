@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
-# This script configures Nginx for a 301 Redirect on a new Ubuntu machine
+#  A Script that configures a new Ubuntu machine to Perform a 301-redirection
 
-# Run the script with sudo
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root"
-  exit
-fi
+# Upadating Packages before Installations
+sudo apt-get update
+sudo apt-get install -y nginx
 
-# Redirect to a new page with a 301 Moved Permanently
-echo "Configuring Nginx for redirection..."
-echo -e "location /redirect_me {\n    return 301 http://your-new-page.com;\n}" > /etc/nginx/sites-available/default
+# Creating an index.html page
+echo "Hello World!" | sudo tee /var/www/html/index.html
 
-# Test Nginx configuration and reload
-nginx -t && systemctl reload nginx
+# Performing a 301 Redirection
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/besthor permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-echo "Redirection configured successfully!"
+# Restarting Nginx service
+sudo service nginx restart
