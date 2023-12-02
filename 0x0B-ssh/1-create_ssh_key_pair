@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
+# This script generates an RSA key pair with the specified requirements.
 
-# Bash script to create an RSA key pair
+# Check if the private key already exists
+if [ -f "school" ]; then
+    echo "Error: Private key 'school' already exists."
+    exit 1
+fi
 
-# Set the key file name and passphrase
-key_file="school"
-passphrase="betty"
+# Generate the RSA key pair with passphrase
+ssh-keygen -t rsa -b 4096 -C "school" -f "school" -N "betty"
 
-# Create RSA key pair with 4096 bits and protect with passphrase
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/$key_file -N $passphrase
-
-echo "RSA key pair created successfully."
+echo "RSA key pair created successfully:"
+echo "Private key: school"
+echo "Public key: school.pub"
