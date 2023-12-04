@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# Update and upgrade the system
+sudo apt update
+sudo apt upgrade -y
+
+# Install HAProxy
+sudo apt install -y haproxy
+
+# Configure HAProxy
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.backup  # Backup the original configuration file
+
+# Create a new HAProxy configuration file
+cat <<EOL | sudo tee /etc/haproxy/haproxy.cfg
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+
+frontend main
+    bind *:80
+    default_backend web_servers
+
+backend web_servers
+    mode http
+    balance roundrobin
+    server web-01 [STUDENT_ID]-web-01:80 check
+    server web-02 [STUDENT_ID]-web-02:80 check
+EOL
+
+# Make sure HAProxy can be managed via init script
+sudo systemctl enable haproxy
+sudo systemctl restart haproxy
+
+# Verify HAProxy status
+sudo systemctl status haproxy
+
+# End of script
