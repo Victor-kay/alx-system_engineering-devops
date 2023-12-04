@@ -17,8 +17,8 @@ frontend  web_servers
         default_backend besthor_backend
 backend web_servers
         balance roundrobin
-        server 176572-web-01 54.165.168.252:80 check
-        server 176572-web-02 34.237.91.136:80 check
+        server 249326-web-01 100.25.168.39 check
+        server 249326-web-02 54.90.2.249 check
 "
 echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg
 
