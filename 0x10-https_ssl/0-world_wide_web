@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# Script: subdomain_audit.sh
+# Description: Configure domain zone and display information about subdomains
+# Usage: ./subdomain_audit.sh domain [subdomain]
+
+# Function to display information about a subdomain
+display_info() {
+    local subdomain="$1"
+    local domain="$2"
+    local record_type="$3"
+    local destination="$4"
+    echo "The subdomain $subdomain is a $record_type record and points to $destination"
+}
+
+# Configure domain zone
+configure_domain() {
+    local domain="$1"
+    
+    # Add subdomains with corresponding IPs
+    echo "Adding www.$domain -> lb-01 IP"
+    # Command to configure www subdomain, replace with actual command
+    # Example: aws route53 change-resource-record-sets ...
+
+    echo "Adding lb-01.$domain -> lb-01 IP"
+    # Command to configure lb-01 subdomain, replace with actual command
+    # Example: aws route53 change-resource-record-sets ...
+
+    echo "Adding web-01.$domain -> web-01 IP"
+    # Command to configure web-01 subdomain, replace with actual command
+    # Example: aws route53 change-resource-record-sets ...
+
+    echo "Adding web-02.$domain -> web-02 IP"
+    # Command to configure web-02 subdomain, replace with actual command
+    # Example: aws route53 change-resource-record-sets ...
+}
+
+# Check if correct number of arguments provided
+if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+    echo "Usage: $0 domain [subdomain]"
+    exit 1
+fi
+
+# Assign arguments to variables
+domain="$1"
+subdomain="$2"
+
+# Default subdomains to check
+subdomains=("www" "lb-01" "web-01" "web-02")
+
+# Configure domain zone
+configure_domain "$domain"
+
+# Display information based on provided arguments
+if [ -z "$subdomain" ]; then
+    for sub in "${subdomains[@]}"; do
+        # Command to retrieve record type and destination, replace with actual command
+        # Example: record_info=$(aws route53 get-resource-record-sets ...)
+        # Example: display_info "$sub" "$domain" "$record_type" "$destination"
+        echo "Simulating display_info for $sub.$domain"
+    done
+else
+    # Command to retrieve record type and destination for specific subdomain
+    # Example: record_info=$(aws route53 get-resource-record-sets ...)
+    # Example: display_info "$subdomain" "$domain" "$record_type" "$destination"
+    echo "Simulating display_info for $subdomain.$domain"
+fi
+
+exit 0
