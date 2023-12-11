@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 rm /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-nginx -t && nginx -s reload || echo "nginx is not running"
+nginx -t && nginx -s reload
+service nginx status | grep -q "not running" && echo "nginx is not running"
