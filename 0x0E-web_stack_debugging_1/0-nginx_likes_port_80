@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Configures an Nginx server to listen on port 80.
+
+# Remove the default configuration if it exists
+if [ -e /etc/nginx/sites-enabled/default ]; then
+    rm /etc/nginx/sites-enabled/default
+    echo "Removed the default Nginx configuration."
+fi
+
+# Create a symbolic link to the default configuration
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+echo "Created a symbolic link to the default Nginx configuration."
+
+# Check Nginx configuration for syntax errors
+if ! nginx -t; then
+    echo "Error in Nginx configuration. Please fix the configuration file before restarting Nginx."
+    exit 1
+fi
+
+# Restart Nginx to apply changes
+service nginx restart
+echo "Nginx has been restarted."
+
+# Check if Nginx is running and listening on port 80
+if netstat -tulpn | grep -q ":80 "; then
+    echo "Nginx is now configured to listen on port 80."
+else
+    echo "Failed to configure Nginx to listen on port 80. Please check for errors."
+    exit 1
+fi
