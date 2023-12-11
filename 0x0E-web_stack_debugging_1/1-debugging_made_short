@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Configures Nginx to listen on port 80.
-
 rm /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-nginx -t && nginx -s reload
+nginx -t
+nginx -s reload
 service nginx status | grep -q "not running" && echo "nginx is not running"
