@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# This script configures Nginx to run as the nginx user, listening on all active IPs on port 8080.
+
+# Install sudo if not already installed
+if ! command -v sudo &> /dev/null; then
+  apt-get update
+  apt-get install -y sudo
+fi
+
+# Create the nginx user if it doesn't exist
+if ! id -u nginx &> /dev/null; then
+  sudo useradd -r -s /sbin/nologin nginx
+fi
+
+# Update Nginx configuration
+sudo sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
+sudo sed -i 's/listen 80;/listen 8080;/' /etc/nginx/sites-available/default
+
+# Restart Nginx to apply changes
+sudo service nginx restart
+
+# Verify that Nginx is running as the nginx user
+ps auxff | grep ngin[x]
+
+# Verify that Nginx is listening on port 8080
+nc -z 0 8080
