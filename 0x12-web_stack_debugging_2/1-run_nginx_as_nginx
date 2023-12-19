@@ -1,26 +1,33 @@
 #!/usr/bin/env bash
 # This script configures Nginx to run as the nginx user, listening on all active IPs on port 8080.
 
-# Install sudo if not already installed
-if ! command -v sudo &> /dev/null; then
-  apt-get update
-  apt-get install -y sudo
+# Install necessary packages (if not already installed)
+apt-get update
+apt-get install -y nginx
+
+# Stop the currently running Nginx service
+service nginx stop
+
+# Update Nginx configuration to run as the nginx user
+sed -i 's/user\s*=\s*www-data/user = nginx/' /etc/nginx/nginx.conf
+
+# Start Nginx with the updated configuration
+nginx -g 'daemon off;' &
+
+# Wait for Nginx to start
+sleep 2
+
+# Check if Nginx is running as the nginx user
+if ps aux | grep -q "[n]ginx: master process"; then
+    echo "Nginx is running as the nginx user."
+else
+    echo "Error: Nginx is not running as the nginx user."
 fi
 
-# Create the nginx user if it doesn't exist
-if ! id -u nginx &> /dev/null; then
-  sudo useradd -r -s /sbin/nologin nginx
-fi
-
-# Update Nginx configuration
-sudo sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
-sudo sed -i 's/listen 80;/listen 8080;/' /etc/nginx/sites-available/default
-
-# Restart Nginx to apply changes
-sudo service nginx restart
-
-# Verify that Nginx is running as the nginx user
-ps auxff | grep ngin[x]
-
-# Verify that Nginx is listening on port 8080
+# Check if Nginx is listening on all active IPs on port 8080
 nc -z 0 8080
+if [ $? -eq 0 ]; then
+    echo "Nginx is listening on all active IPs on port 8080."
+else
+    echo "Error: Nginx is not listening on port 8080."
+fi
