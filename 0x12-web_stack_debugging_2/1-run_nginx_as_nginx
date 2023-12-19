@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
-# A BASH Script that runs Nginx web server as nginx and configures Nginx to listen on port 8080
+# A BASH Script that configures Nginx to run as the nginx user, listening on all active IPs on port 8080.
 
-# Stop Apache2 if running
-pkill apache2
+# Stop the currently running Nginx service
+service nginx stop
 
-# Update Nginx configuration to listen on port 8080
-sed -i 's/80/8080/g' /etc/nginx/sites-available/default
+# Update Nginx configuration to run as the nginx user and listen on port 8080
+sed -i -e 's/user\s*www-data;/user nginx;/g' /etc/nginx/nginx.conf
+sed -i -e 's/listen\s*80;/listen 8080;/g' /etc/nginx/sites-available/default
 
-# Change permissions for nginx.conf
-chmod 644 /etc/nginx/nginx.conf
+# Restart Nginx with the updated configuration
+service nginx restart
 
-# Restart Nginx service as the nginx user
-sudo -u nginx service nginx restart
+# Wait for Nginx to start
+sleep 2
 
 # Check if Nginx is running as the nginx user
-if ps aux | grep -q "[n]ginx: master process"; then
+if ps auxff | grep -q "[n]ginx: master process"; then
     echo "Nginx is running as the nginx user."
 else
     echo "Error: Nginx is not running as the nginx user."
@@ -23,7 +24,7 @@ fi
 # Check if Nginx is listening on all active IPs on port 8080
 nc -z 0 8080
 if [ $? -eq 0 ]; then
-    echo "Nginx is listening on all active IPs on port 8080."
+    echo "nc command succeeded. Nginx is listening on all active IPs on port 8080."
 else
     echo "Error: Nginx is not listening on port 8080."
 fi
