@@ -1,21 +1,17 @@
 #!/usr/bin/env bash
-# This script configures Nginx to run as the nginx user, listening on all active IPs on port 8080.
+# A BASH Script that runs Nginx web server as nginx and configures Nginx to listen on port 8080
 
-# Install necessary packages (if not already installed)
-apt-get update
-apt-get install -y nginx
+# Stop Apache2 if running
+pkill apache2
 
-# Stop the currently running Nginx service
-service nginx stop
+# Update Nginx configuration to listen on port 8080
+sed -i 's/80/8080/g' /etc/nginx/sites-available/default
 
-# Update Nginx configuration to run as the nginx user
-sed -i 's/user\s*=\s*www-data/user = nginx/' /etc/nginx/nginx.conf
+# Change permissions for nginx.conf
+chmod 644 /etc/nginx/nginx.conf
 
-# Start Nginx with the updated configuration
-nginx -g 'daemon off;' &
-
-# Wait for Nginx to start
-sleep 2
+# Restart Nginx service as the nginx user
+sudo -u nginx service nginx restart
 
 # Check if Nginx is running as the nginx user
 if ps aux | grep -q "[n]ginx: master process"; then
